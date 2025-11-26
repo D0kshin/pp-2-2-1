@@ -4,6 +4,7 @@ import hiber.config.AppConfig;
 import hiber.model.Car;
 import hiber.model.User;
 import hiber.service.UserService;
+import org.hibernate.QueryException;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -30,6 +31,8 @@ public class MainApp {
         userService.add(userWithCar1);
         userService.add(userWithCar2);
         userService.add(userWithCar3);
+
+
 
         List<User> users = userService.listUsers();
         for (User user : users) {

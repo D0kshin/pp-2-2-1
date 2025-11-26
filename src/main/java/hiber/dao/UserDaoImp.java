@@ -1,6 +1,7 @@
 package hiber.dao;
 
 import hiber.model.User;
+import org.hibernate.QueryException;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,10 +33,16 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public User getUserByCar(String model, int series) {
-        TypedQuery<User> userTypedQuery =  sessionFactory.getCurrentSession()
-                .createQuery("SELECT u FROM User u WHERE u.car.model = :model AND u.car.series = :series", User.class);
-        userTypedQuery.setParameter("model", model);
-        userTypedQuery.setParameter("series", series);
-        return  (User) userTypedQuery.getSingleResult();
+       try {
+           TypedQuery<User> userTypedQuery = sessionFactory.getCurrentSession()
+                   .createQuery("SELECT u FROM User u WHERE u.car.model = :model AND u.car.series = :series", User.class);
+           userTypedQuery.setParameter("model", model);
+           userTypedQuery.setParameter("series", series);
+           return (User) userTypedQuery.getSingleResult();
+       }
+       catch (QueryException e) {
+           e.printStackTrace();
+           return null;
+       }
     }
 }
